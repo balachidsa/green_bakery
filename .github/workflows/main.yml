@@ -1,7 +1,21 @@
-- name: Build apk
-  # You may pin to the exact commit or the version.
-  # uses: MirkoMajkicProductDock/BuildAPK@24cc2d17f0c8e391166603bffe50f207b9d75859
-  uses: MirkoMajkicProductDock/BuildAPK@v0.0.1
-  with:
-    # Pass the flavour you want to build artefacts for
-    flavour: # optional, default is release
+name: Build APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: green-bakery-apk
+          path: ${{ steps.buildozer.outputs.filename }}
