@@ -39,6 +39,9 @@ jobs:
           pip install buildozer cython==0.29.36
 
       - name: Build APK
+        env:
+          CFLAGS: "-Wno-error=incompatible-pointer-types -Wno-error=incompatible-pointer-types-discards-qualifiers"
+          LDFLAGS: "-Wno-error=incompatible-pointer-types -Wno-error=incompatible-pointer-types-discards-qualifiers"
         run: buildozer -v android debug
 
       - name: Upload APK
